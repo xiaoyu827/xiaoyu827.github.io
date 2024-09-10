@@ -29,6 +29,6 @@
 <body>
     <h2>点击此处进入</h2>
     <p>共同成长学习</p>
-    <a href="weixin://" class="button">点击此处</a>
+    <a href="https://f.wss.cc/f/f20ie1b03fx 复制链接到浏览器打开" class="button">点击此处</a>
 </body>
 </html>
