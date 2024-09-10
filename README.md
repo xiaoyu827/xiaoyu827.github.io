@@ -9,6 +9,8 @@
     <meta property="og:description" content="共同成长学习">
     <meta property="og:image" content="https://s1.locimg.com/2024/09/11/d34f84726386e.png"> <!-- 替换为你的实际图片链接 -->
     <meta property="og:url" content="https://xiaoyu827.github.io/">
+    <meta property="og:type" content="website">
+
     
     <style>
         body {
