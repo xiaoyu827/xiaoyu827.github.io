@@ -25,6 +25,6 @@
 <body>
     <h2>联系我们</h2>
     <p>长按识别下方二维码，了解更多详情</p>
-    <img src="https://u.wechat.com/MOWL-5plU62pzE7RPMR_9SU" alt="微信二维码">
+    <img src="[https://u.wechat.com/MOWL-5plU62pzE7RPMR_9SU](https://github.com/xiaoyu827/xiaoyu827.github.io/blob/main/万倍征途.png)" alt="微信二维码">
 </body>
 </html>
