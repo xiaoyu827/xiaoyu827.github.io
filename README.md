@@ -4,17 +4,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>联系我们</title>
 
-    <!-- Open Graph Meta Data for Social Sharing -->
+    <!-- Open Graph meta tags for social sharing -->
     <meta property="og:title" content="点击此处进村">
     <meta property="og:description" content="共同成长学习">
-    <meta property="og:image" content="https://s1.locimg.com/2024/09/11/d34f84726386e.png">
+    <meta property="og:image" content="https://s1.locimg.com/2024/09/11/d34f84726386e.png"> <!-- 替换为你的实际图片链接 -->
     <meta property="og:url" content="https://xiaoyu827.github.io/">
-
-    <!-- WeChat Meta Data -->
-    <meta name="wechat:title" content="点击此处进村">
-    <meta name="wechat:description" content="共同成长学习">
-    <meta name="wechat:image" content="https://s1.locimg.com/2024/09/11/d34f84726386e.png">
-
+    
     <style>
         body {
             text-align: center;
@@ -30,6 +25,8 @@
 <body>
     <h2>联系我们</h2>
     <p>长按识别下方二维码，了解更多详情</p>
+   
+    <!-- 使用实际的二维码图片链接 -->
     <img src="https://s1.locimg.com/2024/09/11/d34f84726386e.png" alt="微信二维码" width="300">
 </body>
 </html>
