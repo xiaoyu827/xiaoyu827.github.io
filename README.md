@@ -16,10 +16,7 @@
             height: 300px;
         }
 
-        /* 隐藏 GitHub Pages 默认的页脚 */
-        .site-footer {
-            display: none;
-        }
+
     </style>
     
 </head>
