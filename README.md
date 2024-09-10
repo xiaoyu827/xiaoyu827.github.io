@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -19,6 +19,6 @@
 <body>
     <h2>联系我们</h2>
     <p>长按识别下方二维码，了解更多详情</p>
-    <img src="你的二维码链接.jpg" alt="微信二维码">
+    <img src="https://github.com/xiaoyu827/xiaoyu827.github.io/blob/main/群二维码.png" alt="微信二维码">
 </body>
 </html>
