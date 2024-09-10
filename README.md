@@ -3,20 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>跳转到微信</title>
+    <title>微信二维码跳转</title>
 </head>
 <body>
-    <h2>点击下方按钮跳转到微信</h2>
-    <button onclick="openWeChat()">跳转到微信</button>
+    <h2>扫码添加微信</h2>
+    <p>请扫描下方二维码，添加微信与我们联系：</p>
+    
+    <!-- 显示微信二维码 -->
+    <img src="你的二维码链接.jpg" alt="微信二维码" width="300px">
 
-    <script>
-        function openWeChat() {
-            // 跳转到微信的提示页面
-            window.location.href = "weixin://";
-        }
-    </script>
-
-    <p>如果按钮无法使用，请扫描下方二维码添加微信。</p>
-    <img src="你的二维码链接.jpg" alt="扫码添加微信" width="200px">
+    <p>长按二维码识别或使用微信扫一扫。</p>
 </body>
 </html>
