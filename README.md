@@ -2,7 +2,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>联系我们</title>
+    <title>扫码进群</title>
 
     <!-- Open Graph meta tags for social sharing -->
     <meta property="og:title" content="点击此处进村">
