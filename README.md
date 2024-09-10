@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>点击跳转</title>
+    <title>联系我们</title>
     <style>
         body {
             text-align: center;
@@ -12,23 +12,13 @@
         }
         img {
             width: 300px;
-            height: 200px;
-        }
-        .button {
-            display: inline-block;
-            padding: 10px 20px;
-            font-size: 16px;
-            color: white;
-            background-color: #007bff;
-            border: none;
-            border-radius: 5px;
-            text-decoration: none;
+            height: 300px;
         }
     </style>
 </head>
 <body>
-    <h2>点击此处进入</h2>
-    <p>共同成长学习</p>
-    <a href="https://f.wss.cc/f/f20ie1b03fx 复制链接到浏览器打开" class="button">点击此处</a>
+    <h2>联系我们</h2>
+    <p>长按识别下方二维码，了解更多详情</p>
+    <img src="你的二维码链接.jpg" alt="微信二维码">
 </body>
 </html>
