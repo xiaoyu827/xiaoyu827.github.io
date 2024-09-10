@@ -1,7 +1,4 @@
-theme: minima
-minima:
-  footer:
-    show_social_links: false
+# theme: minima
 
 
 
