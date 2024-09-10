@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>扫码添加微信</title>
+    <title>联系我们</title>
     <style>
         body {
             text-align: center;
@@ -17,12 +17,14 @@
         h2 {
             margin-top: 20px;
         }
+        p {
+            color: #666;
+        }
     </style>
 </head>
 <body>
-    <h2>扫码添加微信</h2>
-    <p>请使用微信扫描下方二维码，添加好友或加入群聊。</p>
-    <!-- 这里放置微信二维码图片 -->
-    <img src="你的二维码链接.jpg" alt="微信二维码">
+    <h2>联系我们</h2>
+    <p>长按识别下方二维码，了解更多详情</p>
+    <img src="二维码图片链接" alt="微信二维码">
 </body>
 </html>
