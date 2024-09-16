@@ -82,8 +82,13 @@
         <div class="container">
             <h1>微信举报系统</h1>
             <p>网页端举报平台</p>
-            <button class="login-btn">登录</button>
+            <button class="login-btn" onclick="redirectToLoginPage()">登录</button>
         </div>
     </div>
+     <script>
+        function redirectToLoginPage() {
+            window.location.href = "page.html";
+        }
+    </script>
 </body>
 </html>
