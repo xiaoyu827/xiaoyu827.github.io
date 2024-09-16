@@ -12,20 +12,23 @@
             align-items: center;
             height: 100vh;
             background-color: #f5f5f5;
+            margin: 0;
         }
         .container {
-            width: 300px;
+            width: 350px;
             background-color: white;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
         }
         input[type="text"] {
-            width: 93%;
+            width: 92%;
             padding: 10px;
             margin: 10px 0;
             border: 1px solid #ccc;
             border-radius: 4px;
+            text-align: center;
         }
         .submit-btn {
             width: 100%;
@@ -35,6 +38,7 @@
             border: none;
             border-radius: 4px;
             cursor: pointer;
+            font-size: 16px;
         }
         .submit-btn:disabled {
             background-color: #aaa;
@@ -42,10 +46,25 @@
         .countdown {
             margin-top: 10px;
             color: red;
+            font-weight: bold;
         }
         .result {
             margin-top: 20px;
             display: none;
+        }
+        .result h3, .result p {
+            text-align: center;
+            margin: 10px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
         }
     </style>
 </head>
@@ -57,24 +76,18 @@
     <button class="submit-btn" id="submit-btn">提交举报</button>
     <div id="countdown" class="countdown"></div>
     <div id="result" class="result">
-        <h3>激活卡密成功，类型：永久卡</h3>
+        <h3 id="card-type">激活卡密成功，类型：</h3>
         <p>提交成功！</p>
-        <table border="1" width="100%">
-            <tr>
-                <th>举报时间</th>
-                <th>举报小号</th>
-                <th>举报手机号</th>
-            </tr>
-            <tr>
-                <td>2024-09-16</td>
-                <td>PJM</td>
-                <td>155****0460</td>
-            </tr>
-            <tr>
-                <td>2024-09-16</td>
-                <td>潮玩</td>
-                <td>177****8499</td>
-            </tr>
+        <table id="report-table">
+            <thead>
+                <tr>
+                    <th>举报时间</th>
+                    <th>举报小号</th>
+                    <th>举报手机号</th>
+                </tr>
+            </thead>
+            <tbody id="report-body">
+            </tbody>
         </table>
     </div>
 </div>
@@ -85,6 +98,82 @@
     const cardInput = document.getElementById('card');
     const countdownEl = document.getElementById('countdown');
     const resultEl = document.getElementById('result');
+    const reportBody = document.getElementById('report-body');
+    const cardTypeEl = document.getElementById('card-type');
+
+    // 设置随机小号名称
+    const randomName = () => {
+        const names = ['PJM', '记忆', '王俊凯我爱你', '小白', 'Y.', '精神小伙', '偏爱你丫', '发发大笨蛋'];
+        return names[Math.floor(Math.random() * names.length)];
+    };
+
+    // 生成随机手机号码，符合手机号的正则 (1开头，第二位为3-9，后面9位数字)
+    const randomPhone = () => {
+        const secondDigit = Math.floor(Math.random() * 7) + 3; // 第二位是3-9
+        const remainingDigits = Math.random().toString().slice(2, 11); // 后面9位
+        return `1${secondDigit}${remainingDigits}`;
+    };
+
+    // 获取当前时间
+    const getCurrentTime = () => {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
+        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    };
+
+    // 获取当前日期对象
+    const getCurrentDate = () => {
+        return new Date();
+    };
+
+    // 检查卡密是否过期
+    const isCardExpired = (card) => {
+        const now = getCurrentDate();
+        const { createdAt, duration } = card;
+
+        if (duration === 'permanent') return false; // 永久卡不失效
+
+        const expirationDate = new Date(createdAt);
+        expirationDate.setDate(expirationDate.getDate() + duration); // 设置失效日期
+        return now > expirationDate;
+    };
+
+    // 有效卡密列表，每个卡密都有创建日期和有效期（单位：天）
+    const validCards = [
+        { code: 'dc7d96d4125e819d53e0efe8001afa6a64b35728', createdAt: '2024-09-14', duration: 3 },  // 3天卡密
+        { code: '232059cb5361a9336ccf1b8c2ba7657a', createdAt: '2024-09-10', duration: 7 },  // 7天卡密
+        { code: 'vip666vip', createdAt: '2024-09-16', duration: 'permanent' },  // 永久卡
+    ];
+
+    // 验证卡密
+    const validateCard = (cardCode) => {
+        const card = validCards.find(c => c.code === cardCode);
+        if (!card) return { valid: false, message: '卡密不存在' };
+
+        if (isCardExpired(card)) {
+            return { valid: false, message: '卡密已过期' };
+        }
+
+        return { valid: true, card };
+    };
+
+    // 动态生成举报记录
+    const generateReports = (count) => {
+        for (let i = 0; i < count; i++) {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${getCurrentTime()}</td>
+                <td>${randomName()}</td>
+                <td>${randomPhone()}</td>
+            `;
+            reportBody.appendChild(row);
+        }
+    };
 
     submitBtn.addEventListener('click', function() {
         const wechat = wechatInput.value.trim();
@@ -92,6 +181,13 @@
 
         if (!wechat || !card) {
             alert('请输入正确的微信号和卡密');
+            return;
+        }
+
+        // 验证卡密
+        const { valid, message, card: validCard } = validateCard(card);
+        if (!valid) {
+            alert(message);
             return;
         }
 
@@ -106,6 +202,18 @@
             if (timeLeft <= 0) {
                 clearInterval(countdownInterval);
                 countdownEl.textContent = '';
+
+                // 清空之前的举报记录
+                reportBody.innerHTML = '';
+
+                // 生成多条随机举报记录（例如5条）
+                generateReports(5);
+
+                // 显示激活卡密的类型
+                const cardType = validCard.duration === 'permanent' ? '永久卡' :
+                                 `${validCard.duration}天卡`;
+                cardTypeEl.textContent = `激活卡密成功，类型：${cardType}`;
+
                 resultEl.style.display = 'block';
                 submitBtn.disabled = false;
             }
