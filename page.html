@@ -1,1 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>提交表单</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f5f5f5;
+        }
+        .container {
+            width: 300px;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        input[type="text"] {
+            width: 93%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .submit-btn {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .submit-btn:disabled {
+            background-color: #aaa;
+        }
+        .countdown {
+            margin-top: 10px;
+            color: red;
+        }
+        .result {
+            margin-top: 20px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
 
+<div class="container">
+    <input type="text" id="wechat" placeholder="请输入微信号">
+    <input type="text" id="card" placeholder="请输入卡密">
+    <button class="submit-btn" id="submit-btn">提交举报</button>
+    <div id="countdown" class="countdown"></div>
+    <div id="result" class="result">
+        <h3>激活卡密成功，类型：永久卡</h3>
+        <p>提交成功！</p>
+        <table border="1" width="100%">
+            <tr>
+                <th>举报时间</th>
+                <th>举报小号</th>
+                <th>举报手机号</th>
+            </tr>
+            <tr>
+                <td>2024-09-16</td>
+                <td>PJM</td>
+                <td>155****0460</td>
+            </tr>
+            <tr>
+                <td>2024-09-16</td>
+                <td>潮玩</td>
+                <td>177****8499</td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<script>
+    const submitBtn = document.getElementById('submit-btn');
+    const wechatInput = document.getElementById('wechat');
+    const cardInput = document.getElementById('card');
+    const countdownEl = document.getElementById('countdown');
+    const resultEl = document.getElementById('result');
+
+    submitBtn.addEventListener('click', function() {
+        const wechat = wechatInput.value.trim();
+        const card = cardInput.value.trim();
+
+        if (!wechat || !card) {
+            alert('请输入正确的微信号和卡密');
+            return;
+        }
+
+        submitBtn.disabled = true;
+        let timeLeft = 10;
+        countdownEl.textContent = `举报中，剩余时间 ${timeLeft} 秒`;
+
+        const countdownInterval = setInterval(() => {
+            timeLeft--;
+            countdownEl.textContent = `举报中，剩余时间 ${timeLeft} 秒`;
+
+            if (timeLeft <= 0) {
+                clearInterval(countdownInterval);
+                countdownEl.textContent = '';
+                resultEl.style.display = 'block';
+                submitBtn.disabled = false;
+            }
+        }, 1000);
+    });
+</script>
+
+</body>
+</html>
