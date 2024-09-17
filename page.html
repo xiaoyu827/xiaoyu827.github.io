@@ -81,7 +81,7 @@
         <table id="report-table">
             <thead>
                 <tr>
-                    <th>举报时间</th>
+                    <th>举报日期</th>
                     <th>举报小号</th>
                     <th>举报手机号</th>
                 </tr>
@@ -103,7 +103,7 @@
 
     // 设置随机小号名称
     const randomName = () => {
-        const names = ['PJM', '记忆', '王俊凯我爱你', '小白', 'Y.', '精神小伙', '偏爱你丫', '发发大笨蛋'];
+        const names = ['恰好雨天重逢', '谁说你不好', '以为爱能永久', '比永远多一天', 'Y.', '我从来都不好', '怪我嘴笨', '可你总骗我', '唯一你', '刻在心底的你', '别总灰蒙蒙', '恰好雨天重逢', '谁说你不好', '痛且自知', '我的性格为难你了', '本性宅', '天真有罪', '你的世界不止有我', '别忘我', '你怎么对谁都好',];
         return names[Math.floor(Math.random() * names.length)];
     };
 
@@ -114,49 +114,68 @@
         return `1${secondDigit}${remainingDigits}`;
     };
 
-    // 获取当前时间
-    const getCurrentTime = () => {
+    // 手机号打码 (例如：138****1234)
+    const maskPhone = (phone) => {
+        return phone.slice(0, 3) + '****' + phone.slice(-4);
+    };
+
+    // 获取当前日期
+    const getCurrentDate = () => {
         const now = new Date();
         const year = now.getFullYear();
         const month = String(now.getMonth() + 1).padStart(2, '0');
         const day = String(now.getDate()).padStart(2, '0');
-        const hours = String(now.getHours()).padStart(2, '0');
-        const minutes = String(now.getMinutes()).padStart(2, '0');
-        const seconds = String(now.getSeconds()).padStart(2, '0');
-        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-    };
-
-    // 获取当前日期对象
-    const getCurrentDate = () => {
-        return new Date();
-    };
-
-    // 检查卡密是否过期
-    const isCardExpired = (card) => {
-        const now = getCurrentDate();
-        const { createdAt, duration } = card;
-
-        if (duration === 'permanent') return false; // 永久卡不失效
-
-        const expirationDate = new Date(createdAt);
-        expirationDate.setDate(expirationDate.getDate() + duration); // 设置失效日期
-        return now > expirationDate;
+        return `${year}-${month}-${day}`; // 只显示年-月-日
     };
 
     // 有效卡密列表，每个卡密都有创建日期和有效期（单位：天）
     const validCards = [
         { code: 'dc7d96d4125e819d53e0efe8001afa6a64b35728', createdAt: '2024-09-14', duration: 3 },  // 3天卡密
-        { code: '232059cb5361a9336ccf1b8c2ba7657a', createdAt: '2024-09-10', duration: 7 },  // 7天卡密
         { code: 'vip666vip', createdAt: '2024-09-16', duration: 'permanent' },  // 永久卡
+
+        { code: '9775f917bad22ad3e6336d39ba10164c', createdAt: '2024-09-17', duration: 'once' } // 一次性卡密1
+        { code: '596ec2007beec4a39a24148d86f57602', createdAt: '2024-09-17', duration: 'once' } // 一次性卡密2
+        { code: '69fbc2ed3b2fd5af70f641155c3853d0', createdAt: '2024-09-17', duration: 'once' } // 一次性卡密3
+        { code: 'a512655f513158f4afb6e29525896a54', createdAt: '2024-09-17', duration: 'once' } // 一次性卡密4
+        { code: '5591e237a972bbc2a154d071de6f7b2a', createdAt: '2024-09-17', duration: 'once' } // 一次性卡密5
+        { code: 'e5cc0900703903e405043d667ff0dc86', createdAt: '2024-09-17', duration: 'once' } // 一次性卡密6
+        { code: 'b04f7c2da77f0f6906c98748b92d249e', createdAt: '2024-09-17', duration: 'once' } // 一次性卡密7
+        { code: '7b14b2214d809e8bcdb3fe26f00aead2', createdAt: '2024-09-17', duration: 'once' } // 一次性卡密8
+        { code: '8f932006fd0380fb860a66611911fb6f', createdAt: '2024-09-17', duration: 'once' } // 一次性卡密9
+        { code: '38b6c62bb66fd5eadb49265c11d558b4', createdAt: '2024-09-17', duration: 'once' } // 一次性卡密10
+        { code: 'ea9f039161057bda968f08c0ba8673f3', createdAt: '2024-09-17', duration: 'once' } // 一次性卡密11
+        { code: 'd47f3aed95c0b58bf1b595e9b14580b4', createdAt: '2024-09-17', duration: 'once' } // 一次性卡密12
+        { code: '6d5d6cc5253505bdf22ca92a687f0898', createdAt: '2024-09-17', duration: 'once' } // 一次性卡密13
+        { code: '4abd86e48017e58583d00b6b8a870006', createdAt: '2024-09-17', duration: 'once' } // 一次性卡密14
+        { code: '2c13dd5d12d7ac1a467f3131bcc94820', createdAt: '2024-09-17', duration: 'once' } // 一次性卡密15
+        { code: 'c7149942e189b30716abd5da297219e9', createdAt: '2024-09-17', duration: 'once' } // 一次性卡密16
+        { code: '107bb89aa7c3cbc8eea3aa2df09a9236', createdAt: '2024-09-17', duration: 'once' } // 一次性卡密17
+        { code: 'c7dd148fc7fd256ab2b2e110f6fb0e81', createdAt: '2024-09-17', duration: 'once' } // 一次性卡密18
+        { code: '02249be8c639857d97d14d5dc6d45093', createdAt: '2024-09-17', duration: 'once' } // 一次性卡密19
+        { code: 'cafd4630a1f46274be8f0d2b843815a6', createdAt: '2024-09-17', duration: 'once' } // 一次性卡密20
     ];
+
+    // 检查卡密是否过期或已使用
+    const isCardExpiredOrUsed = (card) => {
+        const now = new Date();
+        const { createdAt, duration, used } = card;
+
+        if (duration === 'permanent') return used ? '卡密已使用' : false; // 永久卡，只需检查是否已使用
+        if (duration === 'once') return used ? '卡密已使用' : false; // 一次性卡密，只能用一次
+        
+        const expirationDate = new Date(createdAt);
+        expirationDate.setDate(expirationDate.getDate() + duration); // 设置失效日期
+        return now > expirationDate ? '卡密已过期' : false;
+    };
 
     // 验证卡密
     const validateCard = (cardCode) => {
         const card = validCards.find(c => c.code === cardCode);
         if (!card) return { valid: false, message: '卡密不存在' };
 
-        if (isCardExpired(card)) {
-            return { valid: false, message: '卡密已过期' };
+        const expiredOrUsedMessage = isCardExpiredOrUsed(card);
+        if (expiredOrUsedMessage) {
+            return { valid: false, message: expiredOrUsedMessage };
         }
 
         return { valid: true, card };
@@ -167,9 +186,9 @@
         for (let i = 0; i < count; i++) {
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td>${getCurrentTime()}</td>
+                <td>${getCurrentDate()}</td>
                 <td>${randomName()}</td>
-                <td>${randomPhone()}</td>
+                <td>${maskPhone(randomPhone())}</td>
             `;
             reportBody.appendChild(row);
         }
@@ -209,8 +228,14 @@
                 // 生成多条随机举报记录（例如5条）
                 generateReports(5);
 
+                // 更新卡密状态，标记一次性卡密为已使用
+                if (validCard.duration === 'once') {
+                    validCard.used = true;
+                }
+
                 // 显示激活卡密的类型
                 const cardType = validCard.duration === 'permanent' ? '永久卡' :
+                                 validCard.duration === 'once' ? '一次性卡' :
                                  `${validCard.duration}天卡`;
                 cardTypeEl.textContent = `激活卡密成功，类型：${cardType}`;
 
