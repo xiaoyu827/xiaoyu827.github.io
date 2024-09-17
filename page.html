@@ -101,10 +101,22 @@
     const reportBody = document.getElementById('report-body');
     const cardTypeEl = document.getElementById('card-type');
 
-    // 设置随机小号名称
+    // 设置随机小号名称，防止重复
+    const usedNames = new Set();
     const randomName = () => {
         const names = ['恰好雨天重逢', '谁说你不好', '以为爱能永久', '比永远多一天', 'Y.', '我从来都不好', '怪我嘴笨', '可你总骗我', '唯一你', '刻在心底的你', '别总灰蒙蒙', '恰好雨天重逢', '谁说你不好', '痛且自知', '我的性格为难你了', '本性宅', '天真有罪', '你的世界不止有我', '别忘我', '你怎么对谁都好'];
-        return names[Math.floor(Math.random() * names.length)];
+
+        let randomIndex;
+        let randomUserName;
+
+        // 保证随机名称不重复
+        do {
+            randomIndex = Math.floor(Math.random() * names.length);
+            randomUserName = names[randomIndex];
+        } while (usedNames.has(randomUserName));
+
+        usedNames.add(randomUserName);
+        return randomUserName;
     };
 
     // 生成随机手机号码，符合手机号的正则 (1开头，第二位为3-9，后面9位数字)
@@ -126,6 +138,24 @@
         const month = String(now.getMonth() + 1).padStart(2, '0');
         const day = String(now.getDate()).padStart(2, '0');
         return `${year}-${month}-${day}`; // 只显示年-月-日
+    };
+
+    // 获取已使用的卡密状态，从localStorage中读取
+    const getUsedCards = () => {
+        return JSON.parse(localStorage.getItem('usedCards')) || [];
+    };
+
+    // 保存已使用的卡密状态到localStorage
+    const saveUsedCard = (cardCode) => {
+        const usedCards = getUsedCards();
+        usedCards.push(cardCode);
+        localStorage.setItem('usedCards', JSON.stringify(usedCards));
+    };
+
+    // 验证卡密是否已使用
+    const isCardUsed = (cardCode) => {
+        const usedCards = getUsedCards();
+        return usedCards.includes(cardCode);
     };
 
     // 有效卡密列表，每个卡密都有创建日期和有效期（单位：天）
@@ -152,15 +182,17 @@
         { code: 'c7dd148fc7fd256ab2b2e110f6fb0e81', createdAt: '2024-09-17', duration: 'once' }, // 一次性卡密18
         { code: '02249be8c639857d97d14d5dc6d45093', createdAt: '2024-09-17', duration: 'once' }, // 一次性卡密19
         { code: 'cafd4630a1f46274be8f0d2b843815a6', createdAt: '2024-09-17', duration: 'once' }  // 一次性卡密20
-    ];
+           ];
 
     // 检查卡密是否过期或已使用
     const isCardExpiredOrUsed = (card) => {
         const now = new Date();
-        const { createdAt, duration, used } = card;
+        const { createdAt, duration } = card;
 
-        if (duration === 'permanent') return used ? '卡密已使用' : false; // 永久卡，只需检查是否已使用
-        if (duration === 'once') return used ? '卡密已使用' : false; // 一次性卡密，只能用一次
+        if (isCardUsed(card.code)) return '卡密已使用'; // 从 localStorage 检查是否已使用
+
+        if (duration === 'permanent') return false; // 永久卡只需检查是否已使用
+        if (duration === 'once') return false; // 一次性卡密，只能用一次
         
         const expirationDate = new Date(createdAt);
         expirationDate.setDate(expirationDate.getDate() + duration); // 设置失效日期
@@ -193,12 +225,27 @@
         }
     };
 
-    submitBtn.addEventListener('click', function() {
+    // 倒计时 10 秒
+    const startCountdown = (duration, onComplete) => {
+        let remainingTime = duration;
+        countdownEl.textContent = `请等待 ${remainingTime} 秒...`;
+        const countdownInterval = setInterval(() => {
+            remainingTime--;
+            countdownEl.textContent = `请等待 ${remainingTime} 秒...`;
+            if (remainingTime <= 0) {
+                clearInterval(countdownInterval);
+                countdownEl.textContent = '';
+                onComplete();
+            }
+        }, 1000);
+    };
+
+    submitBtn.addEventListener('click', () => {
         const wechat = wechatInput.value.trim();
         const card = cardInput.value.trim();
 
         if (!wechat || !card) {
-            alert('请输入正确的微信号和卡密');
+            alert('请输入微信号和卡密');
             return;
         }
 
@@ -209,39 +256,15 @@
             return;
         }
 
-        submitBtn.disabled = true;
-        let timeLeft = 10;
-        countdownEl.textContent = `举报中，剩余时间 ${timeLeft} 秒`;
+        submitBtn.disabled = true; // 禁用按钮，防止重复提交
+        startCountdown(10, () => {
+            resultEl.style.display = 'block'; // 显示结果
+            generateReports(5); // 生成5条举报记录
+            cardTypeEl.textContent = `激活卡密成功，类型：${validCard.duration === 'permanent' ? '永久卡' : validCard.duration === 'once' ? '一次性卡' : validCard.duration + '天卡'}`;
 
-        const countdownInterval = setInterval(() => {
-            timeLeft--;
-            countdownEl.textContent = `举报中，剩余时间 ${timeLeft} 秒`;
-
-            if (timeLeft <= 0) {
-                clearInterval(countdownInterval);
-                countdownEl.textContent = '';
-
-                // 清空之前的举报记录
-                reportBody.innerHTML = '';
-
-                // 生成多条随机举报记录（例如5条）
-                generateReports(5);
-
-                // 更新卡密状态，标记一次性卡密为已使用
-                if (validCard.duration === 'once') {
-                    validCard.used = true;
-                }
-
-                // 显示激活卡密的类型
-                const cardType = validCard.duration === 'permanent' ? '永久卡' :
-                                 validCard.duration === 'once' ? '一次性卡' :
-                                 `${validCard.duration}天卡`;
-                cardTypeEl.textContent = `激活卡密成功，类型：${cardType}`;
-
-                resultEl.style.display = 'block';
-                submitBtn.disabled = false;
-            }
-        }, 1000);
+            saveUsedCard(card); // 保存卡密为已使用
+            submitBtn.disabled = false; // 启用按钮
+        });
     });
 </script>
 
